@@ -3,7 +3,7 @@
         <v-toolbar-side-icon>
             <img class="img-logo" src="../../assets/images/logo.png" />
         </v-toolbar-side-icon>
-        <v-toolbar-title>管理系统</v-toolbar-title>
+        <v-toolbar-title>服务智能分发管理系统</v-toolbar-title>
         <v-spacer/>
         <v-layout style="flex-grow: 0">
             <v-menu bottom offset-y>
@@ -48,7 +48,9 @@
                     self.delCookie('user');
                     self.delCookie('isLogin');
                     localStorage.removeItem('accessedMenus');
+                    localStorage.removeItem('product_limit');
                     localStorage.removeItem('user');
+                    localStorage.removeItem("fetch_time");
                     this.$router.push('/login');
                 }
             }

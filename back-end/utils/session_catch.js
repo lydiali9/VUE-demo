@@ -1,3 +1,6 @@
+/**
+ * 缓存服务器登陆信息
+ */
 var $redisUtil = require('../utils/redis-cluster');
 let keys = require('../db/keys');
 

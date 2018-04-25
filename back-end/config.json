@@ -1,0 +1,41 @@
+{
+  "sql": {
+    "host": "192.168.1.238",
+    "port": "3306",
+    "user": "root",
+    "password": "inveno2016",
+    "database": "service_distribution",
+    "multipleStatements": true,
+    "characterEncoding": "utf8"
+  },
+  "es": {
+    "hosts": [
+      {
+        "host": "106.75.105.200",
+        "port": "9200"
+      },
+      {
+        "host": "106.75.96.240",
+        "port": "9200"
+      },
+      {
+        "host": "106.75.87.146",
+        "port": "9200"
+      }
+    ]
+  },
+  "redis": [
+    {
+      "port": 9002,
+      "host": "192.168.1.234"
+    }
+  ],
+  "rabbit": {
+    "url": "14.17.121.151:8672",
+    "username": "spider",
+    "password": "spider",
+    "queue": "crawler_data_exchange_test"
+  },
+  "product_key": "http://120.132.54.26:8769/createRandomCharData",
+  "source_batch_offline": "http://106.75.109.91:12002/feeder/offshelve"
+}

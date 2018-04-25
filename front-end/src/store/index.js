@@ -13,10 +13,22 @@ export default new Vuex.Store({
         user,
     },
     state: {
+        // setting
+        userList: baseUrl + 'limit/get',
+        addUser: baseUrl + 'limit/add_user',
+        updateUser: baseUrl + 'limit/update_user',
+        delUser: baseUrl + 'limit/del',
+        addUserGroup: baseUrl + 'limit/add_group',
+        updateUserGroup: baseUrl + 'limit/update_user_group',
+        addMenu: baseUrl + 'limit/add_menu',
+        updateMenu: baseUrl + 'limit/update_menu',
+
         // main
         login: baseUrl + 'login/login',
-        "imgUpload": baseUrl + "new/imgUpload",//图片上传路径
+        userProductList: baseUrl + 'product/private/get/',
 
-
+        // crawler
+        getInfo: baseUrl + "crawler/getInfo",
+        getInfoDetail: baseUrl + "crawler/getInfoDetail",
     }
 })

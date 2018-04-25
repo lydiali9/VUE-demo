@@ -17,6 +17,7 @@ module.exports = {
             isLogin: false,
             menu_limit: {},
             product_limit: [],
+            source_limit: [],
             token: ""
         }
         //检查用户密码
@@ -25,7 +26,7 @@ module.exports = {
                 if (rows && rows.length > 0) {
                     callback("", rows[0]);
                 } else {
-                    callback(Object.assign($code.USERNAME_PASSWORD_ERR, {data: ""}), rows[0]);
+                    callback(Object.assign($code.USERNAME_PASSWORD_ERR, {data: ""}), rows);
                 }
             })
         }
@@ -45,7 +46,7 @@ module.exports = {
             })
             query.sqlQuery(sqlStr, sqlArr, function (err, rows) {
                 if (rows && rows.length > 0) {
-                    callback("", rows[0]);
+                    callback("", rows);
                 } else {
                     callback({code: $code.USERNAME_PASSWORD_ERR, msg: err, data: ""}, "");
                 }
@@ -55,13 +56,27 @@ module.exports = {
 
         //查询菜单列表
         let query_menu = function (data, callback) {
-            let menu_limit = JSON.parse(data.menu_limit);
+            let menu_limit = [];
+            let product_limit = [];
+            let source_limit = [];
+            data.forEach(d => {
+                menu_limit = menu_limit.concat(JSON.parse(d.menu_limit));
+                product_limit = product_limit.concat(JSON.parse(d.product_limit));
+                source_limit = source_limit.concat(JSON.parse(d.source_limit));
+            })
+            menu_limit = menu_limit.unique(menu_limit);
+            user.product_limit = user.product_limit.unique(product_limit);
+            user.source_limit = user.source_limit.unique(source_limit);
+
             let sqlStr = keys.sql.login_menu_limit;
             let sqlArr = [];
             menu_limit.forEach(function (item, index) {
                 sqlStr += (index == menu_limit.length - 1 ? "?)" : "?,");
                 sqlArr.push(item);
             })
+            sqlStr += 'ORDER BY ? DESC';
+            sqlArr.push('weight');
+
             query.sqlQuery(sqlStr, sqlArr, function (err, rows) {
                 callback(err, rows);
             })

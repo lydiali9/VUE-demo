@@ -5,15 +5,14 @@ var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var router = require('./routes/router');
 let $validat = require('./controls/Validat');
-require('./utils/FunctionExpand');
+require('./utils/functionExpand');
 
-global.$schedule = require('./utils/schedule/schedule_manager');
-global.$session_catch = require('./utils/session_catch');
 global.$md5 = require('md5');
+global.$session_catch = require('./utils/session_catch');
 global.$code = require('./utils/response_code');
 global.$utils = require('./utils/utils');
 
-var port = process.env.PORT || 8080;//内网：8081，外网：8082
+var port = process.env.PORT || 12200;
 var app = express();
 
 app.all('*', function (req, res, next) {
@@ -38,9 +37,6 @@ app.use(session({
 }));
 //请求过滤
 app.use($validat.validat);
-
-//定时任务
-// $schedule.execute_insert_clear();//部署外网要注释掉这段代码
 
 
 app.use(router);

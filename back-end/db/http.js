@@ -3,9 +3,24 @@ let request = require('request');
 
 module.exports = {
 
-    //执行普通的网络请求
+    //执行get网络请求
     get (url, fn) {
         request(url, (err, rsp, body) => {
+            fn(err, rsp, body);
+        });
+    },
+
+    //执行post网络请求
+    post (url, body, fn) {
+        var options = {
+            url: url,
+            headers: {
+                'User-Agent': 'request',
+                'content-type': 'application/json;charset=UTF-8'
+            },
+            body: JSON.stringify(body)
+        };
+        request(options, (err, rsp, body) => {
             fn(err, rsp, body);
         });
     },

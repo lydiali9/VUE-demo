@@ -3,7 +3,7 @@
  */
 import Vue from 'vue'
 const SnackbarConstructor = Vue.extend(require('./Snackbar.vue')) // 直接将Vue组件作为Vue.extend的参数
-let nId = 1
+var nId = 1
 
 const Snackbar = (data) => {
     let id = 'notice-' + nId++;

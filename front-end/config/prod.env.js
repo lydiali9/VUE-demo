@@ -1,5 +1,5 @@
 module.exports = {
     NODE_ENV: '"production"',
-    SERVER_URL: '"http://127.0.0.1:8082/api/"',
-    SOURCE_URL: '"/SDK/cms"'
+    SERVER_URL: '"http://121.201.57.76:12200/api/"',
+    SOURCE_URL: '"/SDK/opencms"'
 }

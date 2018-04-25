@@ -31,6 +31,11 @@ const utils = {
         return s === null || s === undefined || s === '';
     },
 
+    //判断是否不为空
+    is_not_empty: function (s) {
+        return !(s === null || s === undefined || s === '');
+    },
+
     //判断是否包含空
     has_empty: function (ss) {
         return ss.some(s => s === null || s === undefined)

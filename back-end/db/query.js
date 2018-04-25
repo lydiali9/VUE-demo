@@ -1,23 +1,23 @@
 let config = require('./config');
-//初始化mysql
 let mysql = require('mysql');
+let amqp = require('amqplib/callback_api');
+var when = require('when');
+let elasticsearch = require('elasticsearch');
+//网络请求类
+let request = require('request');
 let pool = "";
-let poolZZ = "";//智子库
-let poolDB = "";//大数据库
 //初始化es
-var elasticsearch = require('elasticsearch');
-var client = "";
-//初始化thrift
-var thrift = require('thrift');
-var ThriftTest = require('../utils/thrift/OutClassifierService');
-let transport = thrift.TFramedTransport;
-let protocol = thrift.TCompactProtocol;
+let client = "";
+//内容组数据处理
+let rabbit_connect = "";
 
 config.getData(function (data) {
+    console.log("配置：" + JSON.stringify(data));
     pool = mysql.createPool(data.sql);
-    poolZZ = mysql.createPool(data.zz_sql);
-    poolDB = mysql.createPool(data.db_sql);
     client = new elasticsearch.Client(data.es);
+    amqp.connect('amqp://' + data.rabbit.username + ':' + data.rabbit.password + '@' + data.rabbit.url, (err, conn) => {
+        rabbit_connect = conn;
+    })
 })
 
 module.exports = {
@@ -25,26 +25,6 @@ module.exports = {
     //执行mysql数据库操作
     sqlQuery(sql, val, cb) {
         pool.getConnection((err, conn) => {
-            let q = conn.query(sql, val, (err, rows) => {
-                cb(err, rows);
-                conn.release();
-            });
-        });
-    },
-
-    //执行智子mysql数据库操作
-    sqlQueryZZ(sql, val, cb) {
-        poolZZ.getConnection((err, conn) => {
-            let q = conn.query(sql, val, (err, rows) => {
-                cb(err, rows);
-                conn.release();
-            });
-        });
-    },
-
-    //执行大数据mysql数据库操作
-    sqlQueryDB(sql, val, cb) {
-        poolDB.getConnection((err, conn) => {
             let q = conn.query(sql, val, (err, rows) => {
                 cb(err, rows);
                 conn.release();
@@ -139,57 +119,58 @@ module.exports = {
         })
     },
 
-    //获取产品id
-    getProductId(fun) {
-        console.log("获取ProductId！");
-
+    //发送请求
+    getAppSecret(length, fn) {
         config.getData(function (data) {
-
-            var connection = thrift.createConnection(data.thrift.host, data.thrift.port, {
-                transport: transport,
-                protocol: protocol
-            });
-            connection.on('error', function (err) {
-                console.log(false, err);
-            });
-            var client = thrift.createClient(ThriftTest, connection);
-            client.getProductId(function (err, result, data) {
-                //如果不关闭连接，那么强制断开连接，将会导致后端出现error
-                connection.end();
-                if (err) {
-                    console.log(err);
-                    fun("");
-                } else {
-                    fun(result);
-                }
+            var options = {
+                url: data.product_key,
+                headers: {
+                    'User-Agent': 'request',
+                    'content-type': 'application/json;charset=UTF-8'
+                },
+                body: JSON.stringify({
+                    "length": length
+                })
+            };
+            request.post(options, function (error, response, body) {
+                fn(error, JSON.parse(body));
             });
         })
     },
 
-    //获取AppSecret
-    getAppSecret(fun) {
-        console.log("获取AppSecret！");
-
-
+    //通知爬虫批量更新
+    postBatchOffline(length, fn) {
         config.getData(function (data) {
+            var options = {
+                url: data.source_batch_offline,
+                headers: {
+                    'User-Agent': 'request',
+                    'content-type': 'application/json;charset=UTF-8'
+                },
+                body: JSON.stringify({
+                    "length": length
+                })
+            };
+            request.post(options, function (error, response, body) {
+                fn(error, JSON.parse(body));
+            });
+        })
+    },
 
-            var connection = thrift.createConnection(data.thrift.host, data.thrift.port, {
-                transport: transport,
-                protocol: protocol
-            });
-            connection.on('error', function (err) {
-                console.log(false, err);
-            });
-            var client = thrift.createClient(ThriftTest, connection);
-            client.getAppSecret(function (err, result, data) {
-                connection.end();
-                if (err) {
-                    console.log(err);
-                    fun("");
-                } else {
-                    fun(result);
-                }
-            });
+    //将创建的资讯发送到rbq服务  amqp
+    postContent(content) {
+        config.getData(data => {
+
+            amqp.connect('amqp://' + data.rabbit.username + ':' + data.rabbit.password + '@' + data.rabbit.url, (err, conn) => {
+                conn.createChannel((err, ch) => {
+                    ch.assertQueue("crawler_data_exchange_test", {durable: false}, _qok => {
+                        ch.sendToQueue("crawler_data_exchange_test", new Buffer(content), (err, res) => {
+                            console.log(err);
+                        });
+                        // ch.close();
+                    })
+                });
+            })
         })
     },
 

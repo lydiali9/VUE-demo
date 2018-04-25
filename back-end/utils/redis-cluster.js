@@ -1,3 +1,6 @@
+/**
+ * Created by Administrator on 2017/7/7.
+ */
 let Redis = require('ioredis');
 let config = require('../db/config');
 let util = require('util');

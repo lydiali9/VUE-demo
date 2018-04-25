@@ -5,42 +5,10 @@
 let query = require('../db/query');
 let keys = require('../db/keys');
 let async = require('async');
-let sql_tool = require('../utils/sql-tool');
-let redis = require('../utils/redis-cluster');
-var eurekaUtils = require('../utils/eureka-utils');
-var rp = require('request-promise');
+var requestPromise = require('request-promise');
 
 module.exports = {
 
-    fetchSC: function(req, res){
-        var bookmarkServer = eurekaUtils.getBookmarkRootUrl(req.eurekaClient);
-        console.log("bookmarkServer: " + bookmarkServer);
-
-        var options = {
-            method: 'POST',
-            uri: bookmarkServer +'/user_daily',
-            body: {
-                "startTime": "2018-01-31",
-                "endTime": "2018-03-12",
-                "product_id": "ali",
-                "content_type": "all",
-                "scenario": "",
-                "strategy": "all",
-                "app_ver": ""
-            },
-            json: true // Automatically stringifies the body to JSON
-        };
-
-        rp(options)
-            .then(function (parsedBody) {
-                console.log(parsedBody);
-                res.json({code: 200, msg: 'SC test ok'});
-            })
-            .catch(function (err) {
-                console.log(err);
-                res.json({code: 101, msg: 'SC test post Error:' + err});
-            });
-    },
     //获取用户列表
     get(req, res) {
         let body = req.body;
@@ -173,22 +141,22 @@ module.exports = {
         if (body.id && body.name && body.group && body.password) {
             let async_list = [];
             //查看是否存在相同的用户名
-            let check_name = function (callback) {
-                query.sqlQuery(keys.sql.user_check_same_name, [body.name], function (err, rows) {
-                    if (err) {
-                        res.json({code: $code.FALSE, msg: err, data: ""});
-                    } else {
-                        if (rows && rows.length > 0) {
-                            callback("已存在相同用户名!", "")
-                        } else {
-                            callback("", "")
-                        }
-                    }
-                })
-            }
-            async_list.push(check_name);
+            // let check_name = function (callback) {
+            //     query.sqlQuery(keys.sql.user_check_same_name, [body.name], function (err, rows) {
+            //         if (err) {
+            //             res.json({code: $code.FALSE, msg: err, data: ""});
+            //         } else {
+            //             if (rows && rows.length > 0) {
+            //                 callback("已存在相同用户名!", "")
+            //             } else {
+            //                 callback("", "")
+            //             }
+            //         }
+            //     })
+            // }
+            // async_list.push(check_name);
 
-            let update = function (data, callback) {
+            let update = function (callback) {
                 body.group = JSON.stringify(body.group);
                 query.sqlQuery(keys.sql.user_update, [body.group, body.name, body.password, body.des, body.id], function (err, rows) {
                     callback(err, rows)
@@ -232,7 +200,7 @@ module.exports = {
     //更新菜单
     update_menu(req, res) {
         let body = req.body;
-        if (body.id && body.type && body.group && body.name && (body.weight || body.weight == 0)) {
+        if (body.id && body.type != null && body.group && body.name && (body.weight || body.weight == 0)) {
             query.sqlQuery(keys.sql.user_menu_update, [body.type, body.group, body.page, body.num, body.router, body.name, body.weight, body.id], function (err, rows) {
                 if (err) {
                     res.json({code: $code.FALSE, msg: err, data: ""});

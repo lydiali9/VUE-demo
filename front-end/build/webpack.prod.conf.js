@@ -30,23 +30,23 @@ var webpackConfig = merge(baseWebpackConfig, {
         new webpack.DefinePlugin({
             'process.env': env
         }),
-        // new webpack.optimize.UglifyJsPlugin({
-        //   compress: {
-        //     warnings: false
-        //   },
-        //   sourceMap: true
-        // }),
-        new ParallelUglifyPlugin({
-            cacheDir: '.cache/',
-            uglifyJS: {
-                output: {
-                    comments: false
-                },
-                compress: {
-                    warnings: false
-                }
-            }
+        new webpack.optimize.UglifyJsPlugin({
+          compress: {
+            warnings: false
+          },
+          sourceMap: true
         }),
+        // new ParallelUglifyPlugin({
+        //     cacheDir: '.cache/',
+        //     uglifyJS: {
+        //         output: {
+        //             comments: false
+        //         },
+        //         compress: {
+        //             warnings: false
+        //         }
+        //     }
+        // }),
         // extract css into its own file
         new ExtractTextPlugin({
             filename: utils.assetsPath('css/[name].[contenthash].css')
@@ -98,7 +98,7 @@ var webpackConfig = merge(baseWebpackConfig, {
         // copy custom static assets
         new CopyWebpackPlugin([
             {
-                from: path.resolve(__dirname, '../static'),
+                from: path.resolve(__dirname, '../src/assets/'),
                 to: config.build.assetsSubDirectory,
                 ignore: ['.*']
             }

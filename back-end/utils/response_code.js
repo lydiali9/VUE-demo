@@ -1,3 +1,7 @@
+/**
+ * 返回码
+ */
+
 const code = {
     SUCCESS: 200,//正常返回
     FALSE: 0,//异常

@@ -1,5 +1,5 @@
 <template>
-    <div class="table">
+    <div class="user-container">
 
         <v-breadcrumbs divider="/" class="cms-breadcrumbs">
             <span class="group pa-2">
@@ -17,7 +17,7 @@
                 <v-spacer></v-spacer>
                 <v-text-field append-icon="search" label="用户名称" single-line hide-details v-model="search" class="mt-2"></v-text-field>
             </v-card-title>
-            <v-data-table :headers="headers" :items="userItems" :search="search">
+            <v-data-table :headers="headers" :items="userItems" :search="search" :pagination.sync="pagination">
                 <template slot="items" slot-scope="props">
                     <td class="text-xs-center">{{ props.item.id }}</td>
                     <td class="text-xs-center">{{ props.item.name }}</td>
@@ -51,25 +51,25 @@
                     <v-card-text>
                         <v-container grid-list-md>
                             <v-layout wrap>
-                                <v-flex xl>
+                                <v-flex xl10>
                                     <v-text-field label="用户名" v-model="editedItem.name" :rules="rules.username" required></v-text-field>
                                 </v-flex>
                             </v-layout>
 
                             <v-layout wrap v-if="showPwd">
-                                <v-flex xl>
+                                <v-flex xl10>
                                     <v-text-field label="密码" v-model="editedItem.password" :rules="rules.password" required></v-text-field>
                                 </v-flex>
                             </v-layout>
 
                             <v-layout wrap>
-                                <v-flex xl>
+                                <v-flex xl10>
                                     <v-select label="所属用户组" :items="userConfigurations" v-model="group" multiple chips persistent-hint></v-select>
                                 </v-flex>
                             </v-layout>
 
                             <v-layout wrap>
-                                <v-flex xl>
+                                <v-flex xl10>
                                     <v-text-field label="描述" v-model="editedItem.des"></v-text-field>
                                 </v-flex>
                             </v-layout>
@@ -133,7 +133,11 @@
                     des: ''
                 },
                 group: [],
-                userConfigurations: []
+                userConfigurations: [],
+                pagination: {
+                    descending: true,
+                    sortBy: 'create_time'
+                }
             }
         },
 
@@ -166,8 +170,8 @@
                             var userItems = {
                                 'id': val.id,
                                 'name': val.name,
-                                'create_time': val.create_time ? self.$utils.formatDate(new Date(val.create_time), 'yyyy-MM-dd hh:mm:ss') : '',
-                                'login_time': val.login_time ? self.$utils.formatDate(new Date(val.login_time), 'yyyy-MM-dd hh:mm:ss') : '',
+                                'create_time': val.create_time ? self.$utils.formatDate(new Date(parseInt(val.create_time)), 'yyyy-MM-dd hh:mm:ss') : '',
+                                'login_time': val.login_time ? self.$utils.formatDate(new Date(parseInt(val.login_time)), 'yyyy-MM-dd hh:mm:ss') : '',
                                 'login_ip': val.login_ip,
                                 'login_count': val.login_count,
                                 'des': val.des,
@@ -311,18 +315,22 @@
 </script>
 
 <style>
-    .table .theme--light .icon {
+    .user-container .theme--light .icon {
         color: rgb(177, 177, 176);
     }
 
-    .cms-space-line {
+    .user-container .cms-space-line {
         height: 20px;
         background: #eeeeef;
     }
 
-    .theme--light .card {
+    .user-container .card {
         background-color: #fff;
         color: rgba(0,0,0,.87);
         padding: 10px 25px;
+    }
+
+    .user-container .breadcrumbs {
+        background-color: #fff;
     }
 </style>

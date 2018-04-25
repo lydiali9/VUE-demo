@@ -4,8 +4,6 @@
  */
 let query = require('../db/query');
 let keys = require('../db/keys');
-let sql_tool = require('../utils/sql-tool');
-let redis = require('../utils/redis-cluster');
 let $api = require('../api');
 
 module.exports = {

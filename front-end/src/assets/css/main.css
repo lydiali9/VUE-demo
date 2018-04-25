@@ -79,32 +79,32 @@ a{text-decoration: none}
 .g-core-image-corp-container .info-aside{
     height:45px;
 }
-.el-upload--text {
-    background-color: #fff;
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    box-sizing: border-box;
-    width: 360px;
-    height: 180px;
-    text-align: center;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-}
-.el-upload--text .el-icon-upload {
-    font-size: 67px;
-    color: #97a8be;
-    margin: 40px 0 16px;
-    line-height: 50px;
-}
-.el-upload--text {
-    color: #97a8be;
-    font-size: 14px;
-    text-align: center;
-}
-.el-upload--text em {
-    font-style: normal;
-}
+/*.el-upload--text {*/
+    /*background-color: #fff;*/
+    /*border: 1px dashed #d9d9d9;*/
+    /*border-radius: 6px;*/
+    /*box-sizing: border-box;*/
+    /*width: 360px;*/
+    /*height: 180px;*/
+    /*text-align: center;*/
+    /*cursor: pointer;*/
+    /*position: relative;*/
+    /*overflow: hidden;*/
+/*}*/
+/*.el-upload--text .el-icon-upload {*/
+    /*font-size: 67px;*/
+    /*color: #97a8be;*/
+    /*margin: 40px 0 16px;*/
+    /*line-height: 50px;*/
+/*}*/
+/*.el-upload--text {*/
+    /*color: #97a8be;*/
+    /*font-size: 14px;*/
+    /*text-align: center;*/
+/*}*/
+/*.el-upload--text em {*/
+    /*font-style: normal;*/
+/*}*/
 /*VueEditor*/
 .ql-container{
     min-height: 400px;
@@ -114,4 +114,27 @@ a{text-decoration: none}
 }
 .editor-btn{
     margin-top: 20px;
+}
+.i_mutiple_input {
+    max-height: 46px;
+    overflow: hidden;
+}
+.i_picker .el-input__inner {
+    min-height: 46px !important;
+    max-height: 46px !important;
+    border: none !important;
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+    font-size: 14px !important;
+}
+.i_echarts {
+    width: 100% !important;
+    height: 100% !important;
+}
+.i_toggle_btn {
+    margin: 1px !important;
+    box-shadow: none !important;
+    border-width: 0 !important;
+}
+.btn-toggle--selected {
+    box-shadow: none !important;
 }

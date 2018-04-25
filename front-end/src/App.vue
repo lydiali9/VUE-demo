@@ -6,7 +6,6 @@
     import store from './store'
     export default {
         store,
-        // name: 'app',
         created () {
             window.UEDITOR_HOME_URL = this.$store.state.ueditor_home_url;
         }

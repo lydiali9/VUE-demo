@@ -44,7 +44,7 @@
             if (self.getCookie('user')) {
                 var titleItems = [];
                 var items = JSON.parse(localStorage.getItem('accessedMenus'));
-                let keys = Object.keys(items);
+                let keys = Object.keys(items).sort();
 
                 keys.forEach(function(key, index) {
                     let subKeys = Object.keys(items[key]);

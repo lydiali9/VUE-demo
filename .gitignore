@@ -1,0 +1,10 @@
+back-end/uploads/
+back-end/node_modules/
+front-end/node_modules/
+front-end/config/
+.idea/
+back-end/pienews/
+front-end/dist/
+dist/
+/front-end/.cache/1a4902e7cc47ca58d633f2c4df736fa5c00266768a578f07082c9194477a4164.js
+/front-end/.cache/c590292bb79b18b4b10a4cc1c65d4390c3d0e67187a646ed71806465a907c641.js
